@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  go:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - go-deps:/go
+    ports:
+      - '8080:8080'
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017
+    command: go run main.go
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '27016:27017'
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
+  go-deps:
